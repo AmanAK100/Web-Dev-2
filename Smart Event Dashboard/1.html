@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Event Dashboard</title>
+    <link rel="stylesheet" href="2.css">
+</head>
+<body>
+    <div class="container">
+        <div class="eventform">
+            <form id="form">
+                <label for="eventitle">Event Title:</label>
+                <input type="text" id="eventitle" required><br>
+
+                <label for="eventDate">Event Date:</label>
+                <input type="date" id="eventDate" required><br>
+
+                <label for="category">Category:</label>
+                <select id="category">
+                    <option value="conference">Conference</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="meetup">Meetup</option>
+                    <option value="webinar">Webinar</option>
+                    <option value="social">Social</option>
+                </select><br>
+
+                <label for="description">Description:</label>
+                <textarea id="description" required></textarea><br>
+
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+
+        <div class="event">
+            <button id="clearAll">Clear All Events</button>
+            <button id="addSample">Add Sample Events</button>
+            <div class="cards"></div>
+        </div>
+
+        <div class="dom"></div>
+    </div>
+
+</body>
+</html>
+
+
+<script>
+    const form = document.querySelector("#form")
+    const eventTitle = document.querySelector("#eventitle")
+    const eventDate = document.querySelector("#eventDate")
+    const category = document.querySelector("#category")
+    const description = document.querySelector("#description")
+    const eventcards = document.querySelector(".cards")
+    const clearAllBtn = document.querySelector("#clearAll")
+    const addSampleBtn = document.querySelector("#addSample")
+
+form.addEventListener("submit", function(event){
+    event.preventDefault()
+
+    const title = eventTitle.value
+    const date = eventDate.value
+    const cat = category.value
+    const desc = description.value
+
+    const card = document.createElement("div")
+    card.classList.add("card")
+
+    card.innerHTML = `
+        <div class="deletecard">X</div>
+        <h3>${title}</h3>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Category:</strong> ${cat}</p>
+        <p>${desc}</p>
+    `
+
+    eventcards.appendChild(card)
+
+    form.reset()
+})
+
+
+// Delete card using event delegation
+eventcards.addEventListener("click", function(e){
+    if(e.target.classList.contains("deletecard")){
+        e.target.parentElement.remove()
+    }
+})
+
+
+// Clear all cards
+clearAllBtn.addEventListener("click", function(){
+    eventcards.innerHTML = ""
+})
+
+
+// Add sample events
+addSampleBtn.addEventListener("click", function(){
+
+    const sampleData = [
+        {title: "Tech Conference", date: "2026-03-10", cat: "conference", desc: "Big tech event"},
+        {title: "React Workshop", date: "2026-04-15", cat: "workshop", desc: "Learn React basics"},
+        {title: "Community Meetup", date: "2026-05-20", cat: "meetup", desc: "Networking event"}
+    ]
+
+    sampleData.forEach(function(item){
+
+        const card = document.createElement("div")
+        card.classList.add("card")
+
+        card.innerHTML = `
+            <div class="deletecard">X</div>
+            <h3>${item.title}</h3>
+            <p><strong>Date:</strong> ${item.date}</p>
+            <p><strong>Category:</strong> ${item.cat}</p>
+            <p>${item.desc}</p>
+        `
+
+        eventcards.appendChild(card)
+    })
+})
+</script>
